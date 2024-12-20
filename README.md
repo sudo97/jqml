@@ -10,6 +10,38 @@ jqml allows you to extract data from JSON documents using a simple path syntax. 
 - Accessing array elements using bracket notation (e.g. `[0]`) 
 - Nested access combining both (e.g. `.users[0].name`)
 
+See examples below:
+
+
+```
+# Accessing array element
+
+$ echo '[{"x":"y"},2,3]' | dune exec jqml '[0]'
+{ "x": "y" }   
+```
+
+```
+# Accessing object field nested in array
+
+$ echo '[{"x":"y"},2,3]' | dune exec jqml '[0].x'
+"y" 
+```
+
+```
+# Accessing object field
+
+$ echo '{"x":"y"}' | dune exec jqml '.x'   
+"y" 
+```
+
+```
+# Accessing nested object field
+
+$ echo '{"x":{"y": "z"}}' | dune exec jqml '.x.y'
+"z"
+```
+
+
 ## Room for improvement
 
 - [ ] Add optional chaining
