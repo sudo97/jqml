@@ -1,6 +1,6 @@
 # jqml
 
-A minimal OCaml implementation of a subset of [jq](https://stedolan.github.io/jq/) functionality for JSON data manipulation.
+A minimal OCaml implementation of a subset of [jq](https://stedolan.github.io/jq/) functionality for JSON data manipulation. This was implemented without consulting the jq documentation - it simply emulates the most commonly used jq features for accessing fields and array elements. Also I was sad because they were looking for OCaml dev in LinkedIn, and didn't give me an interview. Who lacks OCaml knowledge now, huh?
 
 ## Overview
 
