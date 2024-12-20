@@ -1,0 +1,4 @@
+(executable
+ (public_name jqml)
+ (name main)
+ (libraries jqml yojson angstrom))
