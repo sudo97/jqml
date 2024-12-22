@@ -64,6 +64,27 @@ let test_unexisting_field () =
     (Jqml.Path.access [ Obj "hello" ] (`Assoc []))
 ;;
 
+let test_array_slice () =
+  Alcotest.(check (result json string))
+    "array slice"
+    (Ok (`List [ `String "a" ]))
+    (Jqml.Path.access
+       [ ArrSlice (0, 1) ]
+       (`List [ `String "a"; `String "b"; `String "c" ]));
+  Alcotest.(check (result json string))
+    "array slice"
+    (Ok (`List [ `String "b"; `String "c" ]))
+    (Jqml.Path.access
+       [ ArrSlice (1, 3) ]
+       (`List [ `String "a"; `String "b"; `String "c" ]));
+  Alcotest.(check (result json string))
+    "array slice"
+    (Ok (`List [ `String "b"; `String "c" ]))
+    (Jqml.Path.access
+       [ ArrSlice (1, 4) ]
+       (`List [ `String "a"; `String "b"; `String "c" ]))
+;;
+
 let cases =
   Alcotest.
     [ test_case "empty" `Quick test_empty_path
@@ -77,5 +98,6 @@ let cases =
         test_nested_array_index_out_of_bounds
     ; test_case "obj_and_arr_mixed" `Quick test_obj_and_arr_mixed
     ; test_case "unexisting_field" `Quick test_unexisting_field
+    ; test_case "array_slice" `Quick test_array_slice
     ]
 ;;

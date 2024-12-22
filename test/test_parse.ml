@@ -4,6 +4,7 @@ let path =
     match k with
     | Obj key -> Format.fprintf fmt ".%s" key
     | Arr n -> Format.fprintf fmt "[%d]" n
+    | ArrSlice (start, end_) -> Format.fprintf fmt "[%d:%d]" start end_
   in
   let eq = ( = ) in
   Alcotest.testable pp eq

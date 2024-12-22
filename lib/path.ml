@@ -1,6 +1,7 @@
 type t =
   | Arr of int
   | Obj of string
+  | ArrSlice of int * int
 
 let rec access path (json : Yojson.Safe.t) =
   let recur acc err v =
@@ -16,6 +17,18 @@ let rec access path (json : Yojson.Safe.t) =
     (match json with
      | `List lst -> List.nth_opt lst n |> recur rest "Index out of bounds"
      | _ -> Error "Expected a list")
+  | ArrSlice (start, end_) :: [] ->
+    (match json with
+     | `List lst ->
+       Ok
+         (`List
+             (lst
+              |> List.to_seq
+              |> Seq.drop start
+              |> Seq.take (end_ - start)
+              |> List.of_seq))
+     | _ -> Error "Expected a list")
+  | ArrSlice (_, _) :: _ -> failwith "TODO: array slice can only be the last path for now"
 ;;
 
 let parse =
