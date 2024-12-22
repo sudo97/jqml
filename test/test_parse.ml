@@ -56,6 +56,17 @@ let nested_array_and_object_test () =
     (Jqml.Path.parse "[0].hello[1].world[2].foo[3].bar")
 ;;
 
+let array_slice_test () =
+  Alcotest.(check (result (list path) string))
+    "array slice"
+    (Ok [ ArrSlice (1, 2) ])
+    (Jqml.Path.parse "[1:2]");
+  Alcotest.(check (result (list path) string))
+    "array slice"
+    (Ok [ ArrSlice (0, 2) ])
+    (Jqml.Path.parse "[:2]")
+;;
+
 let cases =
   [ "empty path", `Quick, empty_path_test
   ; "single object field", `Quick, single_object_field_test
@@ -64,5 +75,6 @@ let cases =
   ; "nested array", `Quick, nested_array_test
   ; "nested object", `Quick, nested_object_test
   ; "nested array and object", `Quick, nested_array_and_object_test
+  ; "array slice", `Quick, array_slice_test
   ]
 ;;

@@ -41,7 +41,12 @@ let parse =
       | _ -> false)
   in
   let obj = dot *> key >>| fun key -> Obj key in
+  let slice =
+    (fun start end_ -> ArrSlice (int_of_string start, int_of_string end_))
+    <$> char '[' *> option "0" integer
+    <*> (char ':' *> integer <* char ']')
+  in
   let arr = char '[' *> integer <* char ']' >>| fun n -> Arr (int_of_string n) in
-  let path = many (obj <|> arr) in
+  let path = many (obj <|> arr <|> slice) in
   parse_string ~consume:Consume.All path
 ;;
