@@ -64,7 +64,11 @@ let array_slice_test () =
   Alcotest.(check (result (list path) string))
     "array slice"
     (Ok [ ArrSlice (0, 2) ])
-    (Jqml.Path.parse "[:2]")
+    (Jqml.Path.parse "[:2]");
+  Alcotest.(check (result (list path) string))
+    "array slice"
+    (Ok [ ArrSlice (0, Int.max_int) ])
+    (Jqml.Path.parse "[0:]")
 ;;
 
 let cases =

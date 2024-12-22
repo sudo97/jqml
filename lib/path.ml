@@ -42,9 +42,13 @@ let parse =
   in
   let obj = dot *> key >>| fun key -> Obj key in
   let slice =
-    (fun start end_ -> ArrSlice (int_of_string start, int_of_string end_))
+    (fun start end_ -> ArrSlice (int_of_string start, end_))
     <$> char '[' *> option "0" integer
-    <*> (char ':' *> integer <* char ']')
+    <*> (char ':' *> option "" integer
+         <* char ']'
+         >>| function
+         | "" -> Int.max_int
+         | end_ -> int_of_string end_)
   in
   let arr = char '[' *> integer <* char ']' >>| fun n -> Arr (int_of_string n) in
   let path = many (obj <|> arr <|> slice) in
