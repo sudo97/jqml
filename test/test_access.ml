@@ -82,6 +82,12 @@ let test_array_slice () =
     (Ok (`List [ `String "b"; `String "c" ]))
     (Jqml.Path.access
        [ ArrSlice (1, 4) ]
+       (`List [ `String "a"; `String "b"; `String "c" ]));
+  Alcotest.(check (result json string))
+    "array slice"
+    (Ok (`List [ `String "b"; `String "c" ]))
+    (Jqml.Path.access
+       [ ArrSlice (1, Int.max_int) ]
        (`List [ `String "a"; `String "b"; `String "c" ]))
 ;;
 
