@@ -41,16 +41,24 @@ let parse =
       | _ -> false)
   in
   let obj = dot *> key >>| fun key -> Obj key in
-  let slice =
-    (fun start end_ -> ArrSlice (int_of_string start, end_))
-    <$> char '[' *> option "0" integer
-    <*> (char ':' *> option "" integer
-         <* char ']'
-         >>| function
-         | "" -> Int.max_int
-         | end_ -> int_of_string end_)
+  let full_slice =
+    (fun start end_ -> ArrSlice (int_of_string start, int_of_string end_))
+    <$> char '[' *> integer
+    <*> (char ':' *> integer <* char ']')
+  in
+  let slice_no_max =
+    char '[' *> integer
+    <* char ':'
+    <* char ']'
+    >>| fun n -> ArrSlice (int_of_string n, Int.max_int)
+  in
+  let slice_no_min =
+    char '[' *> char ':' *> integer <* char ']' >>| fun n -> ArrSlice (0, int_of_string n)
   in
   let arr = char '[' *> integer <* char ']' >>| fun n -> Arr (int_of_string n) in
-  let path = many (obj <|> arr <|> slice) in
+  let path =
+    many1 (obj <|> arr <|> full_slice <|> slice_no_max <|> slice_no_min)
+    <|> fail "invalid form"
+  in
   parse_string ~consume:Consume.All path
 ;;

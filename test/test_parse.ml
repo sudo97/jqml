@@ -11,7 +11,10 @@ let path =
 ;;
 
 let empty_path_test () =
-  Alcotest.(check (result (list path) string)) "empty path" (Ok []) (Jqml.Path.parse "")
+  Alcotest.(check (result (list path) string))
+    "empty path"
+    (Error ": invalid form")
+    (Jqml.Path.parse "")
 ;;
 
 let single_object_field_test () =
@@ -68,7 +71,11 @@ let array_slice_test () =
   Alcotest.(check (result (list path) string))
     "array slice"
     (Ok [ ArrSlice (0, Int.max_int) ])
-    (Jqml.Path.parse "[0:]")
+    (Jqml.Path.parse "[0:]");
+  Alcotest.(check (result (list path) string))
+    "array slice"
+    (Error ": invalid form")
+    (Jqml.Path.parse "[:]")
 ;;
 
 let cases =
