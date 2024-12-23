@@ -49,3 +49,7 @@ $ echo '{"x":{"y": "z"}}' | dune exec jqml '.x.y'
 - [ ] Add support for filters
 - [ ] Add support for transformations
 - [ ] Rigth now it differs from jq, `.[1]` would not work, it would be `[1]`, this is because this is just an accessor, while jq is a full language where the dot has it's own semantics.
+
+## Important TODO
+
+revisit representation for paths. revisit the meaning of `.` and `[]`. Add foreach. Add creation of new objects and arrays.
