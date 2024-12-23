@@ -2,6 +2,7 @@ type t =
   | Arr of int
   | Obj of string
   | ArrSlice of int * int
+  | ForEach of t
 
 let rec access path (json : Yojson.Safe.t) =
   let recur acc err v =
@@ -29,6 +30,7 @@ let rec access path (json : Yojson.Safe.t) =
               |> List.of_seq))
      | _ -> Error "Expected a list")
   | ArrSlice (_, _) :: _ -> failwith "TODO: array slice can only be the last path for now"
+  | ForEach _ :: _ -> failwith "Not implemented"
 ;;
 
 let parse =
