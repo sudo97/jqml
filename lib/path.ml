@@ -17,9 +17,8 @@ let rec access path (json : Yojson.Safe.t) =
     Ok
       (`List
           (lst |> List.to_seq |> Seq.drop start |> Seq.take (end_ - start) |> List.of_seq))
-  | ArrSlice (_, _) :: _, _ ->
-    failwith "TODO: array slice can only be the last path for now"
-  | ForEach _ :: _, _ -> failwith "Not implemented"
+  | ArrSlice (_, _) :: _, _ -> Error "TODO: array slice can only be the last path for now"
+  | ForEach _ :: _, _ -> Error "Not implemented"
   | _ -> Error "Invalid path, the accessor and the json are not compatible"
 ;;
 
