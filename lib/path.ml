@@ -8,29 +8,19 @@ let rec access path (json : Yojson.Safe.t) =
   let recur acc err v =
     v |> Option.to_result ~none:err |> Fun.flip Result.bind (access acc)
   in
-  match path with
-  | [] -> Ok json
-  | Obj key :: rest ->
-    (match json with
-     | `Assoc fields -> List.assoc_opt key fields |> recur rest "Field not found"
-     | _ -> Error "Expected an object")
-  | Arr n :: rest ->
-    (match json with
-     | `List lst -> List.nth_opt lst n |> recur rest "Index out of bounds"
-     | _ -> Error "Expected a list")
-  | ArrSlice (start, end_) :: [] ->
-    (match json with
-     | `List lst ->
-       Ok
-         (`List
-             (lst
-              |> List.to_seq
-              |> Seq.drop start
-              |> Seq.take (end_ - start)
-              |> List.of_seq))
-     | _ -> Error "Expected a list")
-  | ArrSlice (_, _) :: _ -> failwith "TODO: array slice can only be the last path for now"
-  | ForEach _ :: _ -> failwith "Not implemented"
+  match path, json with
+  | [], _ -> Ok json
+  | Obj key :: rest, `Assoc fields ->
+    List.assoc_opt key fields |> recur rest "Field not found"
+  | Arr n :: rest, `List lst -> List.nth_opt lst n |> recur rest "Index out of bounds"
+  | ArrSlice (start, end_) :: [], `List lst ->
+    Ok
+      (`List
+          (lst |> List.to_seq |> Seq.drop start |> Seq.take (end_ - start) |> List.of_seq))
+  | ArrSlice (_, _) :: _, _ ->
+    failwith "TODO: array slice can only be the last path for now"
+  | ForEach _ :: _, _ -> failwith "Not implemented"
+  | _ -> Error "Invalid path, the accessor and the json are not compatible"
 ;;
 
 let parse =
