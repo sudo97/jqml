@@ -49,6 +49,7 @@ $ echo '{"x":{"y": "z"}}' | dune exec jqml '.x.y'
 - [ ] Add support for filters
 - [ ] Add support for transformations
 - [ ] Rigth now it differs from jq, `.[1]` would not work, it would be `[1]`, this is because this is just an accessor, while jq is a full language where the dot has it's own semantics.
+- [ ] Add support for a stream of JSON separated by whitespaces.
 
 ## Important TODO
 
