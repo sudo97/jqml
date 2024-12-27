@@ -1,3 +1,3 @@
 (library
  (name jqml)
- (libraries yojson angstrom))
+ (libraries yojson angstrom base))
